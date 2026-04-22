@@ -1,0 +1,175 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id                String             @id @default(cuid())
+  email             String             @unique
+  passwordHash      String
+  name              String
+  role              String             // "FREELANCER" | "EMPLOYER"
+  strikes           Int                @default(0)
+  bannedUntil       DateTime?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  
+  freelancerProfile FreelancerProfile?
+  employerProfile   EmployerProfile?
+  proposals         Proposal[]
+  sentMessages      Message[]          @relation("SentMessages")
+  receivedMessages  Message[]          @relation("ReceivedMessages")
+  reviewsGiven      Review[]           @relation("Reviewer")
+  reviewsReceived   Review[]           @relation("Reviewee")
+  disputesRaised    Dispute[]          @relation("DisputeRaiser")
+  reportsReceived   Dispute[]          @relation("ReportedUser")
+}
+
+model FreelancerProfile {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skills       String   // comma separated list
+  hourlyRate   Float?
+  bio          String?
+  availability String?  // "FULL_TIME", "PART_TIME", "UNAVAILABLE"
+  portfolioUrl String?
+  upiId        String?
+  upiQrCodeUrl String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  projectsHired Project[] @relation("HiredFreelancer")
+}
+
+model EmployerProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyName String?
+  website     String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  projects    Project[]
+}
+
+model Project {
+  id              String            @id @default(cuid())
+  employerId      String
+  employer        EmployerProfile   @relation(fields: [employerId], references: [id], onDelete: Cascade)
+  freelancerId    String?
+  freelancer      FreelancerProfile? @relation("HiredFreelancer", fields: [freelancerId], references: [id])
+  
+  title           String
+  description     String
+  requiredSkills  String            // comma separated
+  budgetType      String            // "FIXED" | "HOURLY"
+  budgetMin       Float?
+  budgetMax       Float?
+  status          String            @default("OPEN") // "OPEN", "IN_PROGRESS", "COMPLETED", "CANCELLED"
+  revisionsAllowed Int              @default(0)
+  paymentAmount   Float?
+  paymentStatus   String            @default("PENDING") // PENDING, EMPLOYER_PAID, CONFIRMED
+  paymentProofUrl String?
+  
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  
+  proposals       Proposal[]
+  workspaces      Workspace[]
+  messages        Message[]
+  revisionRequests RevisionRequest[]
+  disputes        Dispute[]
+  reviews         Review[]
+}
+
+model Proposal {
+  id           String   @id @default(cuid())
+  projectId    String
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  freelancerId String
+  freelancer   User     @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
+  
+  coverLetter  String
+  proposedRate Float
+  status       String   @default("PENDING") // "PENDING", "ACCEPTED", "REJECTED"
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Workspace {
+  id          String   @id @default(cuid())
+  projectId   String   @unique
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  status      String   @default("ACTIVE") // "ACTIVE", "CLOSED"
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  messages    Message[]
+}
+
+model Message {
+  id          String    @id @default(cuid())
+  workspaceId String?
+  workspace   Workspace? @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  projectId   String?
+  project     Project?   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  senderId    String
+  sender      User      @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId  String?
+  receiver    User?     @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  content     String
+  fileUrl     String?
+  messageType String    @default("text") // "text" | "image"
+  
+  createdAt   DateTime  @default(now())
+}
+
+model RevisionRequest {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  description String
+  status      String   @default("PENDING") // PENDING, COMPLETED, REJECTED
+  createdAt   DateTime @default(now())
+}
+
+model Dispute {
+  id             String   @id @default(cuid())
+  projectId      String?
+  project        Project?  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  reportedUserId String?
+  reportedUser   User?     @relation("ReportedUser", fields: [reportedUserId], references: [id], onDelete: Cascade)
+  raisedById     String
+  raisedBy       User     @relation("DisputeRaiser", fields: [raisedById], references: [id], onDelete: Cascade)
+  reason      String
+  description String
+  evidenceUrl String?
+  status      String   @default("OPEN") // OPEN, UNDER_REVIEW, RESOLVED
+  createdAt   DateTime @default(now())
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  reviewerId  String
+  reviewer    User     @relation("Reviewer", fields: [reviewerId], references: [id], onDelete: Cascade)
+  revieweeId  String
+  reviewee    User     @relation("Reviewee", fields: [revieweeId], references: [id], onDelete: Cascade)
+  rating      Int
+  text        String?
+  createdAt   DateTime @default(now())
+}

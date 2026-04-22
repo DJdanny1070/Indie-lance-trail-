@@ -1,0 +1,59 @@
+# Indian Freelance Platform - User Manual
+
+Welcome to the AI-driven Indian Freelance Platform. This document explains how to set up, deploy, and use the platform.
+
+## 1. Installation & Local Development
+If you are a developer testing the application locally:
+1. Ensure you have **Node.js** (v18+) installed.
+2. Open a terminal and navigate to the project directory: `cd indian-freelance-platform`
+3. Install the dependencies: `npm install`
+4. Set up the local SQLite database by running: `npx prisma db push` (This creates your local tables).
+5. Start the development server: `npm run dev`
+6. Open `http://localhost:3000` in your browser.
+
+## 2. Deployment (Vercel)
+To make the website accessible for users via a public domain (24/7):
+1. **Push your code to GitHub:**
+   - Initialize a local git repository: `git init`
+   - Add files: `git add .`
+   - Commit: `git commit -m "Initial commit"`
+   - Push to a new GitHub repository.
+2. **Deploy automatically via Vercel:**
+   - Go to [Vercel](https://vercel.com/), sign in, and click "Add New... Project".
+   - Import your GitHub repository.
+   - Vercel will automatically detect Next.js.
+   - If using a PostgreSQL production database, add the `DATABASE_URL` environment variable in the Vercel dashboard.
+   - Click **Deploy**. Vercel will provide you with a live URL (e.g., `yourapp.vercel.app`).
+3. **Custom Domain:**
+   - Inside Vercel, go to "Settings" -> "Domains" to add your `.com`, `.in`, or `.xyz` domain. Follow the DNS instructions to link it.
+   - Once set up, users just need to click your link from any browser (MacOS, Linux, Windows, or Mobile) to open the platform.
+
+## 3. Platform Usage Guide
+
+### For Freelancers
+1. **Sign Up / Log In**: Open the website link and create an account as a "Freelancer". Authentication persists across sessions.
+2. **Complete Profile**: Fill out your digital resume. Add skills, expected hourly/project rate, language abilities, and availability schedule.
+3. **Find Work**: Visit the dashboard. The AI engine will analyze your profile and recommend the most suitable fixed or hourly projects.
+4. **Project Workspace**: Once hired, use the "Workspace" section to chat with your client, exchange project files, and mark milestones as done.
+
+### For Employers (Clients)
+1. **Sign Up / Log In**: Open the website link and select "Employer" on registration. Check back anytime, and you can log in with these credentials.
+2. **Post a Project**: Click "Post Project". Detail what you need, your budget, and whether it's hourly or fixed-price.
+3. **Discover Freelancers**: The dashboard will automatically suggest Indian freelancers who match your project needs. Review their profiles, ratings, and portfolios.
+4. **Manage Hiring & Progress**: Use the project workspace to communicate securely and track when the freelancer completes milestones.
+
+## 4. Deleting Test Data / Jobs
+If you created jobs or proposals for testing purposes, you can clean them up effortlessly from your Dashboard:
+- **Employers**: Under "Your Projects & Hiring", look for projects currently marked as `OPEN`. You will find a **Delete Post** button next to them. Clicking it permanently drops the test project. Projects that are `IN_PROGRESS` cannot be deleted directly to protect escrows.
+- **Freelancers**: Under "Your Proposals", look for applications that are still `PENDING`. You will see a **Withdraw Proposal** button. Clicking it retracts your bid.
+
+## 5. Troubleshooting
+- **Database issues on local**:
+  1. If facing database schema updates, stop the development server (Ctrl+C).
+  2. Run `npx prisma migrate dev` to generate a migration and apply it.
+  3. Run `npx prisma generate` to update the Prisma Client.
+- **How to Reset DB if Needed**:
+  If migrations get stuck or there are irrecoverable database errors (e.g., P2003 during accept):
+  1. Delete the `prisma/dev.db` file.
+  2. Run `npx prisma db push --accept-data-loss` to recreate the schema cleanly.
+- **Deployment issues**: Ensure you do not commit any private API keys or database connection strings to public GitHub repositories if you move to a production database.

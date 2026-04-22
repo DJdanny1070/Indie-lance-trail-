@@ -1,0 +1,22 @@
+# External Needs for Indian Freelance Platform
+
+This document outlines the external services, APIs, and tools that may need to be integrated or purchased to fully deploy and operate all features of the platform.
+
+1. **Payment Gateways & UPI Integration**
+   - **Razorpay or PayU**: Recommended for processing Indian payments, providing UPI, net banking, and card support.
+   - Requires setting up a merchant account, KYC verification, and obtaining API keys.
+
+2. **Hosting Platform**
+   - **Vercel or Render**: For deploying the Next.js web application.
+   - Vercel provides a seamless experience for Next.js and automatic HTTPS.
+   - A custom domain (e.g., .com, .in, .xyz) can be purchased via providers like GoDaddy or Namecheap and linked to the hosting platform.
+
+3. **AI Matching Core**
+   - **OpenAI API or Anthropic Claude API**: For driving the AI freelancer/employer matching engine and recommendations. 
+   - A paid API key will be required for production usage.
+
+4. **Production Database**
+   - **PostgreSQL Database**: While the application uses SQLite for rapid local deployment, for a highly concurrent production environment, a managed PostgreSQL service built on platforms like Supabase, Render, or AWS RDS is highly recommended.
+
+5. **Storage for File Exchange**
+   - **AWS S3 or Cloudinary**: If users exchange heavy project files or portfolio images via the workspace, a cloud storage bucket is required as local storage will be cleared on serverless deployments.

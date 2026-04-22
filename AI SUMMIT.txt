@@ -1,0 +1,46 @@
+=====================================================
+    INDIAN FREELANCE PLATFORM (INDIELANCE)
+=====================================================
+
+OVERVIEW
+IndieLance is a comprehensive, AI-driven SaaS freelancing marketplace tailored specifically for the Indian talent market. The platform bridges the gap between high-quality Indian freelancers and worldwide employers, providing seamless project matching, secure escrow/payment verification, and structured workspace collaboration.
+
+THEMATIC AREAS ALIGNMENT (AI SUMMIT 2026)
+This platform acts as an operational application that fits comfortably into:
+1. Human-Centric AI & Human-AI Collaboration (connecting people through AI matching capabilities).
+2. Machine Learning & Deep Learning Innovations (powering the core matchmaking engine for project assignments).
+
+TECH STACK
+- Frontend & Backend: Next.js (App Router, Server Actions, TypeScript)
+- Database & ORM: PostgreSQL & Prisma ORM
+- Styling: Vanilla CSS (Custom tokens, glassmorphism, flex/grid layouts)
+
+USER ROLES
+1. Freelancer: Local Indian professionals showcasing their skills, portfolios, and setting up UPI-based payment profiles.
+2. Employer: Businesses or individuals posting projects, detailing budget, requirements, and hiring top talent.
+
+KEY FEATURES & WORKFLOW
+
+1. AI-Driven Onboarding
+Once users register, they are directed to role-specific onboarding screens. Freelancers input their skills, hourly rate, bio, and UPI details. Employers set up their company identity to build trust.
+
+2. Project Posting & AI Matchmaking
+Employers easily post projects, specifying fixed or hourly budgets and the required skills. The platform uses an AI matchmaking algorithm to suggest the right freelancers for the job. 
+
+3. Proposal Bidding
+Freelancers can view open jobs and submit tailored proposals, naming their proposed rate and a cover letter.
+
+4. 3-Column Secure Workspaces
+Upon proposal acceptance, a dedicated secure project workspace is instantiated.
+- Right Panel: Project requirements, budget, status updates, and a dispute resolution system. Employers can mark projects complete or request revisions here. Options to leave star ratings and reviews appear post-completion.
+- Center Panel: A real-time, aesthetically pleasing, classy chat system where parties directly exchange messages.
+- Left Panel: Operational Actions. For the Employer, guided instructions are presented here. For the Freelancer, this hosts a clean, elegant UPI QR Code scanner component facilitating direct, zero-fee payments from the Employer.
+
+5. Dynamic UI & Notifications
+The platform boasts an elegant glassmorphism theme with fluid hover effects, rounded layout designs, and a top navigation bar. It includes a real-time notification bell system that alerts users to new status changes, ensuring users never miss critical updates like being hired for a new active project.
+
+6. Escrow & Security
+Zero-man-in-the-middle payments via UPI, with safety guardrails such as "Confirm Payment" buttons, revision tracking, and report/dispute flags.
+
+CONCLUSION
+IndieLance is built to be a fast, secure, aesthetically modern portal emphasizing the strengths of the Indian freelancing community while ensuring employers have a frictionless path from job posting to satisfactory delivery.
